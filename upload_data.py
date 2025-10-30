@@ -3,6 +3,7 @@ from pathlib import Path
 from PIL import Image
 import numpy as np
 from sentence_transformers import SentenceTransformer
+import re
 
 # ==============================
 # 🔐 Zilliz Cloud connection
@@ -76,23 +77,25 @@ def upsert_image(collection, image_id, image_path, location, embedding):
 collection = create_image_collection()
 
 images_dir = Path('./images')
-image_files = [f for f in images_dir.iterdir() if f.suffix.lower() in ('.jpg', '.jpeg', '.png')]
+image_files = [f for f in images_dir.iterdir() if f.suffix.lower() in ('.jpg', '.jpeg', '.png', '.jfif')]
 
 if not image_files:
     print("❌ No images found in ./images folder.")
     exit()
 
-print("\n🔄 Processing and UPSERTING images...")
-
 for idx, image_path in enumerate(image_files, start=1):
     try:
-        # You can replace this with a real location if you have metadata
-        location = image_path.stem.replace("_", " ").title()
+        # Extract location from filename
+        location = image_path.stem.strip()
 
-        # Extract real embedding
+        # Delete trailing digits if any
+        location = re.sub(r"\d+$", "", location).strip()
+
         vec = extract_image_features(str(image_path))
 
+        # Upsert data to collection
         upsert_image(collection, idx, str(image_path), location, vec)
+
     except Exception as e:
         print(f"❌ Error processing {image_path.name}: {e}")
 
