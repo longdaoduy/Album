@@ -8,8 +8,8 @@ import re
 # ==============================
 # 🔐 Zilliz Cloud connection
 # ==============================
-ZILLIZ_CLOUD_URI = "https://in03-975f9d29d0053ed.serverless.aws-eu-central-1.cloud.zilliz.com"
-ZILLIZ_API_KEY = "45afcdb4720c03aedd93bd6e38a86da54d296f193eb5e64350cba4468f2ffcd6eb08fc6da2b6ed9213165662e4ab1482cb23363d"
+ZILLIZ_CLOUD_URI = "your_zilliz_cloud_uri_here"
+ZILLIZ_API_KEY = "your_zilliz_api_key_here"
 
 connections.connect(alias="default", uri=ZILLIZ_CLOUD_URI, token=ZILLIZ_API_KEY)
 
